@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 200 20% 98%;
+    --foreground: 210 50% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 50% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 50% 10%;
+
+    --primary: 205 85% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 30% 94%;
+    --secondary-foreground: 210 50% 15%;
+
+    --muted: 200 20% 96%;
+    --muted-foreground: 210 15% 50%;
+
+    --accent: 195 90% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 200 25% 90%;
+    --input: 200 25% 90%;
+    --ring: 205 85% 45%;
+
+    --radius: 0.75rem;
+
+    --water-light: 200 80% 95%;
+    --water-medium: 205 75% 60%;
+    --water-deep: 210 80% 30%;
+    --water-glow: 195 100% 50%;
+
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer utilities {
+  .gradient-water {
+    background: linear-gradient(135deg, hsl(205 85% 45%), hsl(195 90% 40%));
+  }
+  .gradient-water-light {
+    background: linear-gradient(180deg, hsl(200 80% 95%), hsl(0 0% 100%));
+  }
+  .gradient-hero-overlay {
+    background: linear-gradient(135deg, hsl(210 80% 20% / 0.85), hsl(205 85% 45% / 0.7));
+  }
+  .text-gradient-water {
+    background: linear-gradient(135deg, hsl(205 85% 45%), hsl(195 90% 40%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
