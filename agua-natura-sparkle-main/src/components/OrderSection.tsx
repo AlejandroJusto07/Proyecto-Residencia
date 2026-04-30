@@ -17,6 +17,7 @@ const PRODUCTS = [
 ];
 
 type Item = { producto: string; cantidad: string };
+type Entrega = "sitio" | "domicilio";
 
 const OrderSection = () => {
   const [form, setForm] = useState({
@@ -24,10 +25,17 @@ const OrderSection = () => {
     telefono: "",
     direccion: "",
   });
+  const [entrega, setEntrega] = useState<Entrega>("sitio");
   const [items, setItems] = useState<Item[]>([{ producto: "", cantidad: "1" }]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "telefono") {
+      const onlyDigits = value.replace(/\D/g, "").slice(0, 10);
+      setForm({ ...form, telefono: onlyDigits });
+      return;
+    }
+    setForm({ ...form, [name]: value });
   };
 
   const updateItem = (index: number, field: keyof Item, value: string) => {
@@ -56,17 +64,32 @@ const OrderSection = () => {
       return;
     }
 
+    if (form.telefono.length !== 10) {
+      toast.error("El teléfono debe tener 10 dígitos.");
+      return;
+    }
+
+    if (entrega === "domicilio" && !form.direccion.trim()) {
+      toast.error("Por favor ingresa tu dirección de entrega.");
+      return;
+    }
+
     const lines = validItems.map((it) => {
       const p = PRODUCTS.find((x) => x.name === it.producto);
       const subtotal = p ? p.price * (parseInt(it.cantidad) || 0) : 0;
       return `• ${it.cantidad} x ${it.producto}${p ? ` — $${subtotal} MXN` : ""}`;
     });
 
+    const entregaTxt =
+      entrega === "sitio"
+        ? "🏪 Entrega: En sitio (recoger en sucursal)"
+        : `📍 Entrega a domicilio: ${form.direccion}`;
+
     const msg =
       `Hola, quiero hacer un pedido:\n\n` +
       `👤 Nombre: ${form.nombre}\n` +
       `📞 Teléfono: ${form.telefono}\n` +
-      `📍 Dirección: ${form.direccion}\n\n` +
+      `${entregaTxt}\n\n` +
       `🛒 Productos:\n${lines.join("\n")}\n\n` +
       `💰 Total: $${total} MXN`;
 
@@ -110,23 +133,58 @@ const OrderSection = () => {
               name="telefono"
               required
               type="tel"
-              placeholder="664 123 4567"
+              inputMode="numeric"
+              pattern="[0-9]{10}"
+              maxLength={10}
+              placeholder="6641234567"
               value={form.telefono}
               onChange={handleChange}
               className={inputClass}
             />
+            <p className="text-xs text-muted-foreground mt-1">10 dígitos, solo números.</p>
           </div>
+
           <div>
-            <label className="block font-heading font-semibold text-sm text-foreground mb-1">Dirección de entrega</label>
-            <input
-              name="direccion"
-              required
-              placeholder="Calle, número, colonia"
-              value={form.direccion}
-              onChange={handleChange}
-              className={inputClass}
-            />
+            <label className="block font-heading font-semibold text-sm text-foreground mb-2">Tipo de entrega</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setEntrega("sitio")}
+                className={`rounded-lg border px-4 py-3 font-heading font-semibold text-sm transition-colors ${
+                  entrega === "sitio"
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-foreground hover:border-primary/50"
+                }`}
+              >
+                En sitio
+              </button>
+              <button
+                type="button"
+                onClick={() => setEntrega("domicilio")}
+                className={`rounded-lg border px-4 py-3 font-heading font-semibold text-sm transition-colors ${
+                  entrega === "domicilio"
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-foreground hover:border-primary/50"
+                }`}
+              >
+                A domicilio
+              </button>
+            </div>
           </div>
+
+          {entrega === "domicilio" && (
+            <div>
+              <label className="block font-heading font-semibold text-sm text-foreground mb-1">Dirección de entrega</label>
+              <input
+                name="direccion"
+                required
+                placeholder="Calle, número, colonia"
+                value={form.direccion}
+                onChange={handleChange}
+                className={inputClass}
+              />
+            </div>
+          )}
 
           <div className="space-y-3 pt-2">
             <label className="block font-heading font-semibold text-sm text-foreground">Productos</label>
@@ -136,7 +194,7 @@ const OrderSection = () => {
                   required
                   value={item.producto}
                   onChange={(e) => updateItem(index, "producto", e.target.value)}
-                  className={`${inputClass} flex-1`}
+                  className={`${inputClass} flex-[3] min-w-0`}
                 >
                   <option value="">Selecciona un producto</option>
                   {PRODUCTS.map((p) => (
@@ -148,10 +206,11 @@ const OrderSection = () => {
                 <input
                   type="number"
                   min={1}
+                  max={99}
                   required
                   value={item.cantidad}
                   onChange={(e) => updateItem(index, "cantidad", e.target.value)}
-                  className={`${inputClass} w-20`}
+                  className={`${inputClass} w-14 px-2 text-center`}
                 />
                 <button
                   type="button"
