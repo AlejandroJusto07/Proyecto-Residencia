@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.decrement_stock(uuid, integer) TO anon, authenticated;

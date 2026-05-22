@@ -1,4 +1,6 @@
 import { Droplets } from "lucide-react";
+import { Link } from "react-router-dom";
+
 
 const Footer = () => (
   <footer id="contacto" className="gradient-water text-primary-foreground py-12">
@@ -39,8 +41,11 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="border-t border-primary-foreground/20 mt-10 pt-6 text-center text-sm text-primary-foreground/60">
-        © {new Date().getFullYear()} Agua Natura Otay. Todos los derechos reservados.
+      <div className="border-t border-primary-foreground/20 mt-10 pt-6 flex flex-col sm:flex-row gap-2 items-center justify-between text-sm text-primary-foreground/60">
+        <span>© {new Date().getFullYear()} Agua Natura Otay. Todos los derechos reservados.</span>
+        <Link to="/auth" className="hover:text-primary-foreground transition-colors">
+          Acceso administrador
+        </Link>
       </div>
     </div>
   </footer>
