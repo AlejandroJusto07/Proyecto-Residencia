@@ -113,24 +113,7 @@ const OrderSection = () => {
     setSubmitting(false);
     toast.success("¡Pedido recibido! Te contactamos por WhatsApp.");
 
-    // Abrir WhatsApp con el resumen del pedido
-    const lineas = validItems.map((it) => {
-      const p = PRODUCTS.find((x) => x.name === it.producto);
-      const qty = parseInt(it.cantidad) || 0;
-      return `• ${qty} x ${it.producto} — $${(p?.price ?? 0) * qty}`;
-    }).join("\n");
-    const entregaTxt = entrega === "domicilio" ? `Domicilio: ${form.direccion}` : "Recoger en sitio";
-    const msg =
-      `Hola, soy ${form.nombre}.%0A` +
-      `Tel: ${form.telefono}%0A` +
-      `${entregaTxt}%0A%0A` +
-      `Pedido:%0A${encodeURIComponent(lineas)}%0A%0A` +
-      `Total: $${total} MXN`;
-    window.open(`https://wa.me/526643850934?text=${msg}`, "_blank", "noopener,noreferrer");
-
-    setForm({ nombre: "", telefono: "", direccion: "" });
-    setItems([{ producto: "", cantidad: "1" }]);
-    setEntrega("sitio");
+    
   };
 
 
