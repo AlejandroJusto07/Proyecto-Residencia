@@ -28,7 +28,7 @@ const LocationSection = () => (
           📍 Av. Alejandro Von Humboldt 10, Nueva Tijuana, 22435 Tijuana, B.C.
         </p>
         <p className="text-muted-foreground text-sm mt-1">
-          Lunes a Sábado: 7:00 AM — 7:00 PM | Domingo: 8:00 AM — 3:00 PM
+          Lunes a Sábado: 9:00 AM — 7:00 PM | Domingo: 9:00 AM — 5:00 PM
         </p>
       </div>
     </div>
